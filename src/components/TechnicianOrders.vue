@@ -76,8 +76,9 @@ import ScheduleModel from './ScheduleModel.vue';
    }
    
 </script>
+<!-- style="max-width: 18rem;" -->
 <template>
-    <div class="card border-dark mb-3" style="max-width: 18rem;">
+    <div class="card border-dark mb-3" >
   <div class="card-header justify-content-between d-flex">
         <span>{{ props.technician.name }} #{{ schedules.length }}</span>
         <i class="bi bi-pencil text-info" @click="toggleModel"></i>
