@@ -1,5 +1,5 @@
 <script setup>
-    import { ref , watch, onMounted } from 'vue';
+    import { ref , watch, onMounted,reactive } from 'vue';
     import axios from 'axios';
     import moment from 'moment'
 import { BASE_URL } from '../commons';
@@ -57,8 +57,12 @@ import ScheduleModel from './ScheduleModel.vue';
    const start_at = ref('');
    const end_at = ref('');
    const day = ref('');
+   const errors = ref({})
+   const success = ref(false);
    const assignTechnician = async () => {
        isAssigning.value = false;
+       success.value = false;
+       errors.value = {}
        try {
           let results = await axios.post( `${BASE_URL}/schedules`, {
              day : day.value,
@@ -67,8 +71,9 @@ import ScheduleModel from './ScheduleModel.vue';
              order_id : order_id.value,
              technician_id : props.technician.id
           } );
-       } catch ( ex ) {
-
+          success.value = true;
+       } catch ( ex ) { 
+        errors.value = ex.response.data.messages
        } finally {
         isAssigning.value = false;
         await loadTimeTable();
@@ -137,6 +142,26 @@ import ScheduleModel from './ScheduleModel.vue';
   </div> 
   
   <div class="col-12">
+    <div v-show = "success">
+    <small class="text-success">
+        Successful scheduled an order to technician
+      </small>
+    </div>
+    <div v-show = "errors.day">
+    <small class="text-danger">
+        {{ errors.day }}
+      </small>
+    </div>
+    <div v-show = "errors.start_at">
+      <small class="text-danger">
+        {{ errors.start_at }}
+      </small>
+    </div>
+    <div v-show = "errors.end_at">
+      <small class="text-danger">
+        {{ errors.end_at }}
+      </small>
+    </div>
     <button type="submit" class="btn btn-primary" @click.prevent="assignTechnician">
       <span v-if = "isAssigning">Saving...</span> <span v-if = "!isAssigning">Save</span>
     </button>
