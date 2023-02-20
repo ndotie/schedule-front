@@ -11,15 +11,12 @@ import moment from 'moment';
 const isLoading = ref( false );
 const technicians = ref( [] );
 const date = ref(moment());
-const counter = ref(0);
-const nextday = () => {
-     counter.value = counter.value + 1
-    date.value = moment( date ).add(counter.value,'day')
+ 
+const nextday = () => { 
+    date.value = moment( date.value ).add(1,'day')
 }
-const prevday = () => {
-   
-  counter.value = counter.value - 1
-    date.value = moment( date ).subtract(counter.value,'day')
+const prevday = () => { 
+    date.value = moment( date.value ).subtract(1,'day')
 }
 const loadTechnicians = async () => {
       isLoading.value = true;
